@@ -1,10 +1,6 @@
-version: 0.2
-
 phases:
   install:
     commands:
-      - nvm install 16
-      - nvm use 16
       - node -v
       - echo Installing server dependencies...
       - npm install
@@ -36,4 +32,3 @@ cache:
   paths:
     - 'node_modules/**/*'  # Cache server dependencies.
     - 'client/node_modules/**/*'  # Cache client dependencies.
-
