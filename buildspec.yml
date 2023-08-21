@@ -3,6 +3,8 @@ version: 0.2
 phases:
   install:
     commands:
+      - nvm install 18.14.0
+      - nvm use 18.14.0
       - node -v
       - echo Installing server dependencies...
       - npm install
