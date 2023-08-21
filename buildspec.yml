@@ -1,14 +1,36 @@
-version: 0.0
-os: linux
-files:
-  - source: /
-    destination: /app
-hooks:
-  BeforeInstall:
-    - location: scripts/stop-container.sh
-      timeout: 300
-      runas: root
-  AfterInstall:
-    - location: scripts/build-and-start-container.sh
-      timeout: 300
-      runas: root
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Installing server dependencies...
+      - npm install
+      - echo Installing client dependencies...
+      - cd client && npm install && cd ..
+      
+  pre_build:
+    commands:
+      - echo Starting the MongoDB server...
+      # You may need commands here to start a local MongoDB for testing purposes, if your app requires it.
+  
+  build:
+    commands:
+      - echo Building the React client...
+      - cd client && npm run build && cd ..
+      - echo Running server tests... 
+      - npm test  # This currently just echoes an error message as per your package.json. Consider implementing tests.
+
+  post_build:
+    commands:
+      # You can add any post-build steps here, such as cleanup operations.
+
+artifacts:
+  files:
+    - '**/*'  # This captures all the files in the build directory, you can adjust if you have specific artifacts you want to capture.
+  base-directory: 'client/build'  # This assumes you'd like to capture the built React app. Adjust as needed.
+
+cache:
+  paths:
+    - 'node_modules/**/*'  # Cache server dependencies.
+    - 'client/node_modules/**/*'  # Cache client dependencies.
+
